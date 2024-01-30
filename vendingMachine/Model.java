@@ -193,7 +193,8 @@ public class Model {
 		view.update();
 	}
 
-	public String change(double price, int x){
+	public String change(int price, int x){
+		int ogQ = quartersLeft, ogD = dimesLeft,ogN = nickelsLeft,ogP = amount - pepsiPrice;
 		String ans="";
 		if(x == 0) ans += "Pepsi bought: ";
 		else ans += "Coke bought: ";
@@ -237,7 +238,49 @@ public class Model {
 				ans += "s";
 			}
 		}
-		if(price != 0) ans = "Cannot make correct change: ";
+		if(price != 0){
+			quartersLeft = ogQ;
+			nickelsLeft = ogN;
+			dimesLeft = ogD;
+			price = ogP;
+			ans = "";
+			d=0;
+			n=0;
+			while(dimesLeft>0&&price>=10){
+				price-=10;
+				dimesLeft--;
+				d++;
+			}
+			while(nickelsLeft>0&&price>=5){
+				price-=5;
+				nickelsLeft--;
+				n++;
+			}
+			if(price != 0){
+				ans = "Cannot make change: ";
+				nickelsLeft = ogN;
+				dimesLeft = ogD;
+				quartersLeft = ogQ;
+			}else{
+				if(d>0){
+					ans += d + " dime";
+					if(d>1){
+						ans += "s";
+					}
+					ans += " ";
+				}
+				if(n>0){
+					ans += n + " nickel";
+					if(n>1){
+						ans += "s";
+					}
+				}
+				if(x==0) pepsiLeft --;
+				else cokeLeft --;
+				for(int i=0;i<3;i++) cnt[i]=0;
+				amount = 0;
+			}
+		}
 		else{
 			if(x==0) pepsiLeft --;
 			else cokeLeft --;
